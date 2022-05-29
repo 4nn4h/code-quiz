@@ -1,27 +1,27 @@
 var pageContentEl = document.querySelector("#page-content");
 var wrapperEl = document.querySelector("#wrapper");
 var questionCounter = 0;
-var correctAnswers = 5;
+var correctAnswers = 0;
 var quizKey = [
     {
         question: "Javascript requires header files.",
-        answer: "False"
+        answer: false
     },
     {
         question: "A function doesn't require a semicolon after the closing curly brace.",
-        answer: "True"
+        answer: true
     },
     {
         question: "Two equals signs set a variable equal to a value.",
-        answer: "False"
+        answer: false
     },
     {
         question: 'The "%" symbol is known as the "modulus operator".',
-        answer: "True"
+        answer: true
     },
     {
         question: "JavaScript is the same programming language as Java.",
-        answer: "False"
+        answer: false
     }
 ];
 
@@ -39,7 +39,7 @@ var createStarterPage = function () {
     wrapperEl.appendChild(subtextItemEl);
 
     var buttonItemEl = document.createElement("button");
-    buttonItemEl.className = "option-btn";
+    buttonItemEl.className = "start-btn";
     buttonItemEl.id = "start-btn";
     buttonItemEl.textContent = "Start Quiz";
 
@@ -100,25 +100,34 @@ var revertToDefault = function () {
 };
 
 var createPageHandler = function (event) {
-    targetEl = event.target;
+    var targetEl = event.target;
 
-    if (targetEl.matches(".option-btn") && questionCounter < 5) {
-        revertToDefault();
-        createQuestionPages();
-    }
+    switch (true) {
+        case targetEl.matches("#start-btn"):
+            revertToDefault();
+            createQuestionPages();
+            break;
 
-    if (targetEl.matches(".option-btn") && questionCounter == 5) {
-        revertToDefault();
-        createEndPage();
+        case targetEl.matches(".option-btn") && questionCounter > 0 && questionCounter < 5:
+            revertToDefault();
+            createQuestionPages();
+            break;
 
-        if (targetEl.matches("#back-btn")) {
-            questionCounter = 0;
-            correctAnswers = 5;
+        case targetEl.matches(".option-btn") && questionCounter == 5:
+            revertToDefault();
+            createEndPage();
+            break;
+
+        case targetEl.matches("#back-btn"):
             revertToDefault();
             createStarterPage();
-        }
+            break;
     }
+};
+
+var answerCheckHandler = function (event) {
 };
 
 createStarterPage();
 pageContentEl.addEventListener("click", createPageHandler);
+pageContentEl.addEventListener("click", answerCheckHandler);
