@@ -1,5 +1,28 @@
 var pageContentEl = document.querySelector("#page-content");
 var wrapperEl = document.querySelector("#wrapper");
+var questionCounter = 0;
+var quizKey = [
+    {
+        question: "Javascript requires header files.",
+        answer: "False"
+    },
+    {
+        question: "A function doesn't require a semicolon after the closing curly brace.",
+        answer: "True"
+    },
+    {
+        question: "Two equals signs set a variable equal to a value.",
+        answer: "False"
+    },
+    {
+        question: 'The "%" symbol is known as the "modulus operator".',
+        answer: "True"
+    },
+    {
+        question: "JavaScript is the same programming language as Java.",
+        answer: "False"
+    }
+];
 
 var createStarterPage = function () {
     var headerItemEl = document.createElement("h1");
@@ -15,25 +38,36 @@ var createStarterPage = function () {
     wrapperEl.appendChild(subtextItemEl);
 
     var buttonItemEl = document.createElement("button");
-    buttonItemEl.className = "start-btn";
+    buttonItemEl.className = "option-btn";
+    buttonItemEl.id = "start-btn";
     buttonItemEl.textContent = "Start Quiz";
 
     wrapperEl.appendChild(buttonItemEl);
 };
 
-var questionPages = function () {
+var createQuestionPages = function () {
     var headerItemEl = document.createElement("h1");
     headerItemEl.className = "header-text";
-    headerItemEl.textContent = "Test";
+    headerItemEl.textContent = quizKey[questionCounter].question;
 
     wrapperEl.appendChild(headerItemEl);
 
     for (i = 0; i < 2; i++){
         var buttonItemEl = document.createElement("button");
-        buttonItemEl.className = "option-button";
-        buttonItemEl.textContent = "Answer";
+        buttonItemEl.className = "option-btn";
+    
+        buttonItemEl.textContent = "True";
+        buttonItemEl.id = "true";
         wrapperEl.appendChild(buttonItemEl);
+    
+        if (i == 1) {
+            buttonItemEl.textContent = "False";
+            buttonItemEl.id = "false";
+            wrapperEl.appendChild(buttonItemEl);
+        }
     }
+
+    questionCounter += 1;
 };
 
 var revertToDefault = function () {
@@ -44,14 +78,14 @@ var revertToDefault = function () {
     pageContentEl.appendChild(wrapperEl);
 };
 
-var buttonHandler = function(event) {
+var createPageHandler = function (event) {
     targetEl = event.target;
 
-    if (targetEl.matches(".start-btn")) {
+    if (targetEl.matches(".option-btn")) {
         revertToDefault();
-        questionPages();
+        createQuestionPages();
     }
 };
 
 createStarterPage();
-pageContentEl.addEventListener("click", buttonHandler);
+pageContentEl.addEventListener("click", createPageHandler);
