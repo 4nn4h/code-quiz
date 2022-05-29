@@ -1,6 +1,7 @@
 var pageContentEl = document.querySelector("#page-content");
 var wrapperEl = document.querySelector("#wrapper");
 var questionCounter = 0;
+var correctAnswers = 5;
 var quizKey = [
     {
         question: "Javascript requires header files.",
@@ -52,22 +53,42 @@ var createQuestionPages = function () {
 
     wrapperEl.appendChild(headerItemEl);
 
-    for (i = 0; i < 2; i++){
+    for (i = 0; i < 2; i++) {
         var buttonItemEl = document.createElement("button");
         buttonItemEl.className = "option-btn";
-    
+
         buttonItemEl.textContent = "True";
         buttonItemEl.id = "true";
         wrapperEl.appendChild(buttonItemEl);
-    
+
         if (i == 1) {
             buttonItemEl.textContent = "False";
             buttonItemEl.id = "false";
             wrapperEl.appendChild(buttonItemEl);
         }
     }
-
     questionCounter += 1;
+};
+
+var createEndPage = function () {
+    var headerItemEl = document.createElement("h1");
+    headerItemEl.className = "header-text";
+    headerItemEl.textContent = "Finished!";
+
+    wrapperEl.appendChild(headerItemEl);
+
+    var subtextItemEl = document.createElement("p");
+    subtextItemEl.className = "add-text";
+    subtextItemEl.textContent = "You score for this quiz is...";
+
+    wrapperEl.appendChild(subtextItemEl);
+
+    var buttonItemEl = document.createElement("button");
+    buttonItemEl.className = "option-btn";
+    buttonItemEl.id = "back-btn";
+    buttonItemEl.textContent = "Try Again";
+
+    wrapperEl.appendChild(buttonItemEl);
 };
 
 var revertToDefault = function () {
@@ -81,9 +102,21 @@ var revertToDefault = function () {
 var createPageHandler = function (event) {
     targetEl = event.target;
 
-    if (targetEl.matches(".option-btn")) {
+    if (targetEl.matches(".option-btn") && questionCounter < 5) {
         revertToDefault();
         createQuestionPages();
+    }
+
+    if (targetEl.matches(".option-btn") && questionCounter == 5) {
+        revertToDefault();
+        createEndPage();
+
+        if (targetEl.matches("#back-btn")) {
+            questionCounter = 0;
+            correctAnswers = 5;
+            revertToDefault();
+            createStarterPage();
+        }
     }
 };
 
